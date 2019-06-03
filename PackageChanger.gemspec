@@ -12,17 +12,16 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Uses the API to list or replace a package in all JSS policies in which it appears.}
   spec.description   = %q{With the help or Ruby JSS, uses the API to list all the policies in which a package appears
                               and gives the ability to replace the package in all these policies.}
-  spec.homepage      = "https://github.bus.zalan.do/"
+  spec.homepage      = "https://github.com/Bearzooka/PackageChanger"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata["allowed_push_host"] = "https://rubygems.org/"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-    spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+    spec.metadata["source_code_uri"] = "https://github.com/Bearzooka/PackageChanger"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
