@@ -1,38 +1,25 @@
 # PackageChanger
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/PackageChanger`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Using Ruby-JSS to work with the JSS API, PackageChange lists the policies in which a package is used and gives the ability to change this package for a new one.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'PackageChanger'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install PackageChanger
 
 ## Usage
 
-TODO: Write usage instructions here
+Once installed, create a configuration file in /etc/packagechanger.conf
 
-## Development
+You can copy a sample file from the data folder inside the installation path of *PackageChanger* and fill the JSS URL, User and Password.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Once configured, you can use it:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```packagechanger [--silent] --old OldPackageName --new NewPackageName || --list ListedPackage```
+
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/PackageChanger.
+Bug reports and pull requests are welcome on GitHub at https://github.com/Bearzooka/PackageChanger.
 
 ## License
 
