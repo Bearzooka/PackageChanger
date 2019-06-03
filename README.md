@@ -16,6 +16,8 @@ Once configured, you can use it:
 
 ```packagechanger [--silent] --old OldPackageName --new NewPackageName || --list ListedPackage```
 
+Run the first execution with sudo, or change the mode of the file `/private/var/log/packagechanger.log` so all users can write to it.
+
 
 ## Contributing
 
