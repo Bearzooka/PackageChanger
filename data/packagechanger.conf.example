@@ -1,0 +1,20 @@
+#################
+# This config file uses default settings.
+#
+# Each setting is defined on one line like so:
+#
+#     key: value
+#
+# Values may have spaces.
+#
+# Blank lines and those starting with # are ignored.
+
+jamf_server:
+
+jamf_port:
+
+jamf_use_ssl:
+
+jamf_user:
+
+jamf_password:

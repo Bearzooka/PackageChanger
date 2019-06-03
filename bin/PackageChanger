@@ -1,0 +1,151 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'rubygems'
+require 'getoptlong'
+require_relative '../lib/PackageChanger/config'
+require_relative '../lib/PackageChanger/connection'
+require_relative '../lib/PackageChanger/messages'
+require_relative '../lib/PackageChanger/log'
+
+old_package = nil
+new_package = nil
+list_package = nil
+mode = nil
+result_array = []
+silent = false
+
+# The CLI options for GetoptLong
+OPTS = GetoptLong.new(
+    ['--old', '-o', GetoptLong::REQUIRED_ARGUMENT],
+    ['--new', '-n', GetoptLong::REQUIRED_ARGUMENT],
+    ['--list', '-l', GetoptLong::REQUIRED_ARGUMENT],
+    ['--silent', '-s', GetoptLong::NO_ARGUMENT]
+)
+
+logger = PackageChanger::Log.new
+
+OPTS.each do |opt, arg|
+  case opt
+  when '--old'
+    if arg == ''
+      puts PackageChanger::USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      old_package = arg
+      mode = 'change'
+    end
+
+  when '--new'
+    if arg == ''
+      puts PackageChanger::USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      new_package = arg
+    end
+
+  when '--list'
+    if arg == ''
+      puts PackageChanger::USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      list_package = arg
+      mode = "list"
+    end
+  when '--silent'
+   silent = true
+
+  end
+end
+
+unless (old_package and new_package) or list_package
+  puts PackageChanger::USAGE
+  logger.write('Missing package names')
+  exit 1
+end
+
+begin
+
+  if PackageChanger::Configuration::DEFAULT_CONF_FILE.file?
+    @config_src = PackageChanger::Configuration::DEFAULT_CONF_FILE.to_s
+  elsif PackageChanger::Configuration::SAMPLE_CONF_FILE.file?
+    puts PackageChanger::CONFIG_ERROR
+    logger.write('Missing configuration file.')
+    exit 1
+  end
+
+  PackageChanger.connect_to_jss
+
+  if mode == 'list'
+    unless JSS::Package.valid_id list_package
+      logger.write("#{list_package} does not exist")
+      puts PackageChanger::MISSSING_LIST_PACKAGE
+      exit 1
+    end
+
+    result_array = PackageChanger.get_policies_with(list_package, silent)
+
+    if result_array.count > 0
+      puts "The package #{list_package} is used on the following policies: "
+      result_array.each do |result|
+        puts "\t#{result[:id]} - #{result[:name]}"
+      end
+    else
+      puts PackageChanger::NO_RESULTS_LIST
+      exit 0
+    end
+
+  elsif mode == "change"
+    unless JSS::Package.valid_id old_package and JSS::Package.valid_id new_package
+      logger.write("Either #{old_package} or #{new_package} do not exist")
+      puts PackageChanger::MISSSING_PACKAGE
+      exit 1
+    end
+
+    result_array = PackageChanger.get_policies_with(old_package, silent)
+
+    if result_array.count > 0
+      puts "The package #{old_package} will be replaced with #{new_package}: "
+      logger.write("The package #{old_package} will be replaced with #{new_package}")
+      result_array.each do |result|
+        puts "\t#{result[:id]} - #{result[:name]}"
+        logger.write("\t#{result[:id]} - #{result[:name]}")
+      end
+
+      confirmation = ''
+
+      while confirmation !~ (/[yn]/i)
+        puts 'Please confirm [y/n]:'
+        confirmation = gets.chomp.downcase
+      end
+
+      case confirmation
+      when 'y'
+        puts 'Processing changes.' unless silent
+        logger.write('Starting changes.')
+        PackageChanger.replace_packages(result_array, old_package, new_package, silent, logger)
+        puts 'Finished changing packages.' unless silent
+        logger.write('Finished changing.')
+        exit 0
+      when 'n'
+        puts 'Cancelling changes.'
+        logger.write('User cancelled.')
+        exit 0
+      else
+        puts PackageChanger::ERROR
+        logger.write(PackageChanger::ERROR)
+        exit 1
+      end
+
+    else
+      puts PackageChanger::NO_RESULTS_CHANGE
+      logger.write(PackageChanger::NO_RESULTS_CHANGE)
+      exit 0
+    end
+
+  end
+
+end
