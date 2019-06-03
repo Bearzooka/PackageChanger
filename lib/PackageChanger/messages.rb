@@ -5,7 +5,7 @@ module PackageChanger
 
 ≈≈≈ PackageChanger ≈≈≈
 
-  Usage: packagechanger --old OldPackageName --new NewPackageName
+  Usage: packagechanger [--silent] --old OldPackageName --new NewPackageName || --list ListedPackage
 "
 
 

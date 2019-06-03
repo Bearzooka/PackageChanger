@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aafc43d4-d949-4146-b083-c23d7640623e" name="Default Changelist" comment="" />
+    <list default="true" id="aafc43d4-d949-4146-b083-c23d7640623e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/lib/PackageChanger/messages.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PackageChanger/messages.rb" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +30,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PackageChanger.gemspec">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="257">
@@ -87,11 +89,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/PackageChanger/messages.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="48" column="18" selection-start-line="48" selection-start-column="18" selection-end-line="48" selection-end-column="18" />
+            <state relative-caret-position="-604">
+              <caret line="7" column="100" lean-forward="true" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="100" />
             </state>
           </provider>
         </entry>
@@ -126,10 +128,10 @@
         <option value="$PROJECT_DIR$/lib/PackageChanger/foundation.rb" />
         <option value="$PROJECT_DIR$/lib/PackageChanger.rb" />
         <option value="$PROJECT_DIR$/lib/PackageChanger/config.rb" />
-        <option value="$PROJECT_DIR$/lib/PackageChanger/messages.rb" />
         <option value="$PROJECT_DIR$/bin/PackageChanger" />
         <option value="$PROJECT_DIR$/lib/PackageChanger/connection.rb" />
         <option value="$PROJECT_DIR$/PackageChanger.gemspec" />
+        <option value="$PROJECT_DIR$/lib/PackageChanger/messages.rb" />
       </list>
     </option>
   </component>
@@ -302,22 +304,23 @@
       <workItem from="1558990142370" duration="597000" />
       <workItem from="1559121371191" duration="1723000" />
       <workItem from="1559123144022" duration="423000" />
-      <workItem from="1559130106299" duration="22175000" />
+      <workItem from="1559130106299" duration="22512000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27694000" />
+    <option name="totallyTimeSpent" value="28031000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32972974" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4985694" visible="true" weight="0.39904988" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4985694" visible="true" weight="0.39904988" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.35629454" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -401,13 +404,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/PackageChanger/messages.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="48" column="18" selection-start-line="48" selection-start-column="18" selection-end-line="48" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/PackageChanger">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2730">
@@ -443,6 +439,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="257">
           <caret line="42" column="9" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/PackageChanger/messages.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-604">
+          <caret line="7" column="100" lean-forward="true" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="100" />
         </state>
       </provider>
     </entry>
