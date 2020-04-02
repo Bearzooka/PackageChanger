@@ -14,7 +14,7 @@ You can copy a sample file from the data folder inside the installation path of 
 
 Once configured, you can use it:
 
-```packagechanger [--silent] [-- policy PolicyID] --old OldPackageName --new NewPackageName || --list ListedPackage```
+```packagechanger [--silent] [--policy PolicyID] --old OldPackageName --new NewPackageName || --list ListedPackage```
 
 The PolicyID can be either the numeric ID of a JSS policy, or its name between quotes.
 
