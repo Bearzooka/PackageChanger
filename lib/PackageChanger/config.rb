@@ -1,4 +1,3 @@
-
 require 'singleton'
 require 'pathname'
 
@@ -46,7 +45,7 @@ module PackageChanger
     def read(file)
       available_conf_keys = CONF_KEYS.keys
 
-      puts file
+      # puts file
       Pathname.new(file).read.each_line do |line|
         # skip blank lines and those starting with #
         next if line =~ /^\s*(#|$)/
