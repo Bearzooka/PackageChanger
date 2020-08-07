@@ -18,7 +18,9 @@ module PackageChanger
         jamf_port: :to_i,
         jamf_use_ssl: nil,
         jamf_user: nil,
-        jamf_password: nil
+        jamf_password: nil,
+        testers_keyword: nil,
+        release_keyword: nil
     }.freeze
 
     # automatically create accessors for all the CONF_KEYS
@@ -86,4 +88,5 @@ module PackageChanger
   def self.config
     PackageChanger::Configuration.instance
   end
-end # module
+end
+# module
