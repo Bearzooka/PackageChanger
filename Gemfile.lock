@@ -1,0 +1,51 @@
+PATH
+  remote: .
+  specs:
+    PackageChanger (0.3.0)
+      ruby-jss (~> 1.0, >= 1.2.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    immutable-struct (2.4.1)
+    mime-types (3.3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2019.1009)
+    minitest (5.14.0)
+    net-ldap (0.16.2)
+    netrc (0.11.0)
+    plist (3.5.0)
+    rake (13.0.1)
+    recursive-open-struct (1.1.1)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
+    ruby-jss (1.2.10)
+      immutable-struct (~> 2.3, >= 2.3.0)
+      net-ldap (~> 0.16)
+      plist (~> 3.1)
+      recursive-open-struct (~> 1.1, >= 1.1.0)
+      rest-client (>= 2.0.0, < 2.1)
+      ruby-mysql (~> 2.9, >= 2.9.12)
+    ruby-mysql (2.9.14)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  PackageChanger!
+  bundler (~> 2.0)
+  minitest (~> 5.0)
+  rake (>= 12.3.3)
+  ruby-jss (~> 1.0, >= 1.2.3)
+
+BUNDLED WITH
+   2.1.4

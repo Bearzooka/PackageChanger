@@ -13,8 +13,8 @@ old_package = nil
 new_package = nil
 list_package = nil
 target_policy = nil
-mode = nil
-result_array = []
+app_title = nil
+version = nil
 silent = false
 
 # The CLI options for GetoptLong
@@ -23,7 +23,11 @@ OPTS = GetoptLong.new(
   ['--old', '-o', GetoptLong::REQUIRED_ARGUMENT],
   ['--new', '-n', GetoptLong::REQUIRED_ARGUMENT],
   ['--list', '-l', GetoptLong::REQUIRED_ARGUMENT],
-  ['--silent', '-s', GetoptLong::NO_ARGUMENT]
+  ['--silent', '-s', GetoptLong::NO_ARGUMENT],
+  ['--patch', '-x', GetoptLong::REQUIRED_ARGUMENT],
+  ['--version', '-v', GetoptLong::REQUIRED_ARGUMENT],
+  ['--test', '-t', GetoptLong::REQUIRED_ARGUMENT],
+  ['--release', '-r', GetoptLong::REQUIRED_ARGUMENT]
 )
 
 logger = PackageChanger::Log.new
@@ -33,7 +37,7 @@ mode = 'change'
 
 OPTS.each do |opt, arg|
   case opt
-  when '--policy'
+  when '--policy', '-p'
     if arg == ''
       puts PackageChanger::USAGE
       logger.write('Missing arguments.')
@@ -45,7 +49,7 @@ OPTS.each do |opt, arg|
       mode = 'single'
     end
 
-  when '--old'
+  when '--old', '-o'
     if arg == ''
       puts PackageChanger::USAGE
       logger.write('Missing arguments.')
@@ -54,7 +58,7 @@ OPTS.each do |opt, arg|
       old_package = arg
     end
 
-  when '--new'
+  when '--new', '-n'
     if arg == ''
       puts PackageChanger::USAGE
       logger.write('Missing arguments.')
@@ -63,7 +67,7 @@ OPTS.each do |opt, arg|
       new_package = arg
     end
 
-  when '--list'
+  when '--list', '-l'
     if arg == ''
       puts PackageChanger::USAGE
       logger.write('Missing arguments.')
@@ -74,13 +78,52 @@ OPTS.each do |opt, arg|
       # Change mode to list if flag is used
       mode = 'list'
     end
-  when '--silent'
+
+  when '--silent', '-s'
     silent = true
 
+  when '--patch', '-x'
+    if arg == ''
+      puts PackageChanger::PATCH_USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      app_title = arg
+      mode = 'patch'
+    end
+
+  when '--version', '-v'
+    if arg == ''
+      puts PackageChanger::PATCH_USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      version = arg
+    end
+
+  when '--test', '-t'
+    if arg == ''
+      puts PackageChanger::PATCH_USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      app_title = arg
+      mode = 'test'
+    end
+
+  when '--release', '-r'
+    if arg == ''
+      puts PackageChanger::PATCH_USAGE
+      logger.write('Missing arguments.')
+      exit 1
+    else
+      app_title = arg
+      mode = 'release'
+    end
   end
 end
 
-unless (old_package && new_package) || list_package
+unless (old_package && new_package) || list_package || (app_title && new_package) || app_title
   puts PackageChanger::USAGE
   logger.write('Missing package names')
   exit 1
@@ -88,6 +131,8 @@ end
 
 begin
   puts PackageChanger::STARTUP unless silent
+
+  # Check for configurations before starting
   if PackageChanger::Configuration::DEFAULT_CONF_FILE.file?
     @config_src = PackageChanger::Configuration::DEFAULT_CONF_FILE.to_s
   elsif PackageChanger::Configuration::SAMPLE_CONF_FILE.file?
@@ -98,16 +143,17 @@ begin
 
   PackageChanger.connect_to_jss(silent)
 
-  if mode == 'list'
+  case mode
+  when 'list'
     unless JSS::Package.valid_id list_package
       logger.write("#{list_package} does not exist")
-      puts PackageChanger::MISSSING_LIST_PACKAGE
+      puts PackageChanger::MISSING_LIST_PACKAGE
       exit 1
     end
 
     result_array = PackageChanger.get_policies_with(list_package, silent, logger)
 
-    if result_array.count > 0
+    if result_array.count.positive?
       puts "\u{1F3C1} The package #{list_package} is used on the following policies: "
       result_array.each do |result|
         puts "\t#{result[:id]} - #{result[:name]}"
@@ -117,16 +163,16 @@ begin
       exit 0
     end
 
-  elsif mode == 'change'
+  when 'change'
     unless JSS::Package.valid_id(old_package) && JSS::Package.valid_id(new_package)
       logger.write("Either #{old_package} or #{new_package} do not exist")
-      puts PackageChanger::MISSSING_PACKAGE
+      puts PackageChanger::MISSING_PACKAGE
       exit 1
     end
 
     result_array = PackageChanger.get_policies_with(old_package, silent)
 
-    if result_array.count > 0
+    if result_array.count.positive?
       puts "The package #{old_package} will be replaced with #{new_package}: "
       logger.write("The package #{old_package} will be replaced with #{new_package}")
       result_array.each do |result|
@@ -134,20 +180,9 @@ begin
         logger.write("\t#{result[:id]} - #{result[:name]}")
       end
 
-      confirmation = ''
-
-      while confirmation !~ /[yn]/i
-        puts 'Please confirm [y/n]:'
-        confirmation = gets.chomp.downcase
-      end
-
-      case confirmation
+      case PackageChanger.confirm
       when 'y'
-        puts 'Processing changes.' unless silent
-        logger.write('Starting changes.')
         PackageChanger.replace_packages(result_array, old_package, new_package, silent, logger)
-        puts "\u{1F3C1} Finished changing packages." unless silent
-        logger.write('Finished changing.')
         exit 0
       when 'n'
         puts 'Cancelling changes.'
@@ -165,18 +200,54 @@ begin
       exit 0
     end
 
-  elsif mode == 'single'
-    unless JSS::Package.valid_id(old_package) && JSS::Package.valid_id(new_package)
-      logger.write("Either #{old_package} or #{new_package} does not exist")
-      puts PackageChanger::MISSSING_PACKAGE
+  when 'patch'
+    patch_title = PackageChanger.check_patch(app_title, new_package, version, silent, logger)
+
+    case PackageChanger.confirm
+    when 'y'
+      PackageChanger.assign_patch(patch_title, new_package, version, silent, logger)
+      exit 0
+    when 'n'
+      puts "\u{1F519} Cancelling changes."
+      logger.write('User cancelled.')
+      exit 0
+    else
+      puts PackageChanger::ERROR
+      logger.write(PackageChanger::ERROR)
       exit 1
     end
 
+  when 'test', 'release'
+    patch_policy_id = PackageChanger.check_version_for_mode(app_title, version, mode, silent, logger)
+
+    puts "\u{1f3AB} #{app_title} has a #{mode} patch policy with ID #{patch_policy_id}" unless silent
+    logger.write("#{app_title} has a #{mode} patch policy with ID #{patch_policy_id}")
+
+    case PackageChanger.confirm
+    when 'y'
+      PackageChanger.activate_patch_for_mode(app_title, mode, version, patch_policy_id, silent, logger)
+      exit 0
+    when 'n'
+      puts "\u{1F519} Cancelling changes."
+      logger.write('User cancelled.')
+      exit 0
+    else
+      puts PackageChanger::ERROR
+      logger.write(PackageChanger::ERROR)
+      exit 1
+    end
+
+  when 'single'
+    unless JSS::Package.valid_id(old_package) && JSS::Package.valid_id(new_package)
+      logger.write("Either #{old_package} or #{new_package} does not exist")
+      puts PackageChanger::MISSING_PACKAGE
+      exit 1
+    end
 
     target_policy = target_policy.match(/[^[:digit:]]+/) ? target_policy : target_policy.to_i
     unless JSS::Policy.valid_id(target_policy)
       logger.write("The policy with id #{target_policy} does not exist.")
-      puts PackageChanger::MISSSING_POLICY
+      puts PackageChanger::MISSING_POLICY
       exit 1
     end
 
@@ -185,14 +256,7 @@ begin
     puts "\u{1F4E6} The package #{old_package}\n\u{27A1 FE0F}  will be replaced with #{new_package}\n\u{1F4CC} in #{changed_pol.name}"
     logger.write("The package #{old_package} will be replaced with #{new_package} in #{changed_pol.name}")
 
-    confirmation = ''
-
-    while confirmation !~ /[yn]/i
-      puts 'Please confirm [y/n]:'
-      confirmation = gets.chomp.downcase
-    end
-
-    case confirmation
+    case PackageChanger.confirm
     when 'y'
       puts "\u{1F3A2} Processing changes." unless silent
       logger.write('Starting changes.')
