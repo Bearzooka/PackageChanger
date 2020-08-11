@@ -104,7 +104,7 @@ module PackageChanger
 
     unless JSS::Package.valid_id(new_package)
       logger.write("#{new_package} does not exist")
-      puts PackageChanger::MISSSING_ONE_PACKAGE
+      puts PackageChanger::MISSING_ONE_PACKAGE
       exit 1
     end
     puts "\u{1F4E6} #{new_package} is available in JSS." unless silent
