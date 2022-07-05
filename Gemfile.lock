@@ -32,7 +32,7 @@ GEM
       recursive-open-struct (~> 1.1, >= 1.1.0)
       rest-client (>= 2.0.0, < 2.1)
       ruby-mysql (~> 2.9, >= 2.9.12)
-    ruby-mysql (2.9.14)
+    ruby-mysql (2.11.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
